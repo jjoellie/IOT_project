@@ -20,7 +20,7 @@ jobs:
     - name: Build Docker image
       run: |
         echo "===== DOCKERFILE CONTENT ====="
-        cat dockerfile
+        cat dockerfile_
         echo "=============================="
         docker build --no-cache -f dockerfile_ -t pi-builder .
 
