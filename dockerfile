@@ -1,8 +1,7 @@
-FROM debian:bullseye
+FROM arm32v7/debian:bullseye
 
 RUN apt-get update && apt-get install -y \
-    g++ \
-    make \
+    gcc \
     pigpio \
     pigpio-tools \
     libpigpio-dev \
@@ -12,6 +11,4 @@ WORKDIR /app
 
 COPY main.c .
 
-RUN g++ -o led_app main.c -lpigpio -lrt -lpthread
-
-CMD ["./led_app"]
+RUN gcc -o led_test main.c -lpigpio -lrt -lpthread
