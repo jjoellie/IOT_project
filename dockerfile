@@ -12,6 +12,6 @@ WORKDIR /app
 
 COPY main.c .
 
-RUN g++ -o led_app main.cpp -lpigpio -lrt -lpthread
+RUN g++ -o led_app main.c -lpigpio -lrt -lpthread
 
 CMD ["./led_app"]
