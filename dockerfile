@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY main.cpp .
+COPY main.c .
 
 RUN g++ -o led_app main.cpp -lpigpio -lrt -lpthread
 
