@@ -19,6 +19,9 @@ jobs:
     # 2️⃣ Build Docker image (let op: lowercase dockerfile)
     - name: Build Docker image
       run: |
+       echo "===== DOCKERFILE CONTENT ====="
+        cat dockerfile
+        echo "=============================="
         docker build -f dockerfile -t pi-builder .
 
     # 3️⃣ Compileer main.c in Pi-compatibele container
