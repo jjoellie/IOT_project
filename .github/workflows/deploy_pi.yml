@@ -22,7 +22,8 @@ jobs:
         echo "===== DOCKERFILE CONTENT ====="
         cat dockerfile
         echo "=============================="
-        docker build -f dockerfile -t pi-builder .
+        docker build --no-cache -f dockerfile_ -t pi-builder .
+
 
     # 3️⃣ Compileer main.c in Pi-compatibele container
     - name: Compile application
