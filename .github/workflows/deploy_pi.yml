@@ -10,16 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Haal de code op
-    - name: Checkout repository
+    # 1️⃣ Checkout repository via SSH (geen HTTPS)
+    - name: Checkout repository via SSH
       uses: actions/checkout@v4
+      with:
+        ssh-key: ${{ secrets.PI_SSH_KEY }}
 
-    # 2️⃣ Build Docker image (Pi-compatible)
+    # 2️⃣ Build Docker image (let op: lowercase dockerfile)
     - name: Build Docker image
       run: |
         docker build -f dockerfile -t pi-builder .
 
-    # 3️⃣ Compileer main.c in container
+    # 3️⃣ Compileer main.c in Pi-compatibele container
     - name: Compile application
       run: |
         docker run --rm \
@@ -28,7 +30,7 @@ jobs:
           gcc /src/main.c -o /src/led_test \
           -lpigpio -lrt -lpthread
 
-    # 4️⃣ SSH configureren
+    # 4️⃣ SSH setup voor Raspberry Pi
     - name: Setup SSH
       run: |
         mkdir -p ~/.ssh
@@ -36,13 +38,13 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.PI_HOST }} >> ~/.ssh/known_hosts
 
-    # 5️⃣ Stop oude applicatie (indien actief)
+    # 5️⃣ Stop lopende applicatie op Pi (indien aanwezig)
     - name: Stop running app on Pi
       run: |
         ssh ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} \
         "tmux kill-session -t led_app || true"
 
-    # 6️⃣ Stuur nieuwe executable naar Pi
+    # 6️⃣ Kopieer nieuwe executable naar Pi
     - name: Copy executable to Pi
       run: |
         scp led_test \
